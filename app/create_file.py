@@ -2,8 +2,16 @@ import sys
 import os
 from datetime import datetime
 
-
 args = sys.argv[1:]
+
+if "-d" in args and "-f" not in args:
+    d_index = args.index("-d")
+    directories = args[d_index + 1:]
+
+    if directories:
+        os.makedirs(os.path.join(*directories), exist_ok=True)
+
+    sys.exit()
 
 if "-f" not in args:
     raise ValueError("Missing -f flag")
@@ -30,7 +38,7 @@ if directory:
 
 with open(path, "a") as file:
     if os.path.getsize(path) > 0:
-        file.write("\n\n")
+        file.write("\n")
 
     file.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S\n"))
 
