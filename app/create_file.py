@@ -15,11 +15,17 @@ if "-f" in command:
 else:
     raise Exception
 
+if d_index > f_index:
+    command.append(command.pop(f_index + 1))
+    command.insert(-1, command.pop(f_index))
+
+d_index = command.index("-d")
+f_index = command.index("-f")
+
 if d_index and f_index:
     path_list += command[d_index + 1:f_index]
 path_list.append(command[-1])
 
-print(path_list)
 path = os.path.join(*path_list)
 directory = os.path.dirname(path)
 
