@@ -1,38 +1,46 @@
-from datetime import datetime
 import sys
 import os
+from datetime import datetime
 
 
 args = sys.argv[1:]
 
-if not args:
-    raise ValueError("No arguments provided")
+if "-f" not in args:
+    raise ValueError("Missing -f flag")
 
+f_index = args.index("-f")
+filename = args[f_index + 1]
 
-if args[0] == "-d":
-    directories = args[1:]
+directories = []
 
-    path = os.path.join(*directories)
+if "-d" in args:
+    d_index = args.index("-d")
 
-    os.makedirs(path, exist_ok=True)
+    if d_index < f_index:
+        directories = args[d_index + 1:f_index]
+    else:
+        directories = args[d_index + 1:]
 
+path = os.path.join(*directories, filename)
 
-elif args[0] == "-f":
-    filename = args[1]
+directory = os.path.dirname(path)
 
-    with open(filename, "a") as file:
-        file.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S\n"))
+if directory:
+    os.makedirs(directory, exist_ok=True)
 
-        index = 1
+with open(path, "a") as file:
+    if os.path.getsize(path) > 0:
+        file.write("\n\n")
 
-        while True:
-            line = input("Enter content line: ")
+    file.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S\n"))
 
-            if line == "stop":
-                break
+    index = 1
 
-            file.write(f"{index} {line}\n")
-            index += 1
+    while True:
+        line = input("Enter content line: ")
 
-else:
-    raise ValueError("Unknown flag")
+        if line == "stop":
+            break
+
+        file.write(f"{index} {line}\n")
+        index += 1
