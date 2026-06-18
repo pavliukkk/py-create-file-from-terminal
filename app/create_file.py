@@ -43,8 +43,9 @@ def create_file_and_content(file_path: str) -> None:
         if file_exists and os.path.getsize(file_path) > 0:
             file.write("\n")
 
+        date_now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         file.write(
-            f"{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n"
+            f"{date_now}\n"
         )
 
         if lines:
@@ -66,5 +67,6 @@ def main() -> None:
 
     elif directories:
         os.makedirs(os.path.join(*directories), exist_ok=True)
+
 
 main()
